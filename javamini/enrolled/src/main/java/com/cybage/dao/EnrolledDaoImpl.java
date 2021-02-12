@@ -11,13 +11,14 @@ import com.cybage.util.DbUtil;
 
 
 public class EnrolledDaoImpl implements EnrolledDao{
-	public List<Enrolled> findEnrolled() throws Exception {
+	public List<Enrolled> findEnrolled(int user_id) throws Exception {
 		Connection con = DbUtil.getCon();
 
-		String sql = "SELECT course_name, enroll_course.start_date,enroll_course.end_date FROM course RIGHT JOIN enroll_course ON course.course_id = enroll_course.course_id";
+		String sql = "SELECT course_name, enroll_course.start_date,enroll_course.end_date FROM course RIGHT JOIN enroll_course ON course.course_id = enroll_course.course_id and enroll_course.user_id = ?";
 		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1,user_id);
 		ResultSet rs = ps.executeQuery();
-
+		
 		List<Enrolled> enroll = new ArrayList<Enrolled>();
 		while (rs.next()) {
 			Enrolled enrolled = new Enrolled();
